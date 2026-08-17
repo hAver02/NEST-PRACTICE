@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task, TaskStatus } from './entities/task.entity';
@@ -7,8 +7,12 @@ import { Task, TaskStatus } from './entities/task.entity';
 export class TasksService {
 
   private tasks: Task[] = [];
+  constructor(@Inject('TASKS_LIMIT') private readonly taskLimit: number) { }
 
   create(dto: CreateTaskDto) {
+    if (this.tasks.length >= this.taskLimit) {
+      throw new BadRequestException('Task limit reached');
+    }
     const newTask: Task = {
       id: crypto.randomUUID(),
       title: dto.title,

@@ -6,8 +6,8 @@ import { DeleteTaskWarningMiddleware } from '../common/middlewares/delete-task-w
 
 @Module({
   controllers: [TasksController],
-  providers: [TasksService],
-  exports: [TasksService],
+  providers: [TasksService, { provide: 'TASKS_LIMIT', useValue: 5 }],
+  exports: [TasksService, 'TASKS_LIMIT'],
   imports: [UsersModule],
 })
 export class TasksModule implements NestModule {

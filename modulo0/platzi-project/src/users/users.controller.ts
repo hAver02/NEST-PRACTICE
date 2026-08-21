@@ -1,13 +1,8 @@
 import { BadRequestException, Body, ConflictException, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { randomUUID, UUID } from 'crypto';
+import { User } from './user.model';
 
-
-interface User {
-    id: UUID,
-    name: string,
-    email: string
-}
 
 @Controller('users')
 export class UsersController {

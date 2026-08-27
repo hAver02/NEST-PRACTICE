@@ -1,7 +1,7 @@
-import { UUID } from "crypto"
+import { UUID } from 'crypto';
 
 export interface User {
-    id: UUID,
-    name: string,
-    email: string
+    id: UUID;
+    name: string;
+    email: string;
 }

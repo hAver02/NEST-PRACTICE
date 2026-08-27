@@ -1,50 +1,35 @@
-import { BadRequestException, Body, ConflictException, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import { UUID } from 'crypto';
+import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { randomUUID, UUID } from 'crypto';
-import { User } from './user.model';
-
+import { UpdateUserDto } from './dtos/update.user.dto';
 
 @Controller('users')
 export class UsersController {
-
-    private users: User[] = [{ id: randomUUID(), name: 'Luciano', email: 'luciano@gmail.com' }]
-
+    constructor(private readonly usersService: UsersService) {}
 
     @Get()
     getUsers() {
-        return this.users
+        return this.usersService.getUsers();
     }
 
     @Get(':id')
     getUserById(@Param('id', ParseUUIDPipe) id: UUID) {
-        const user = this.users.find(user => user.id === id)
-        if (!user) throw new NotFoundException("User not found")
-        return user
+        return this.usersService.getUserById(id);
     }
 
     @Post()
     createUser(@Body() user: CreateUserDto) {
-        const userExist = this.users.find(us => user.email === us.email);
-        if (userExist) throw new ConflictException("User already exists");
-
-        const newUser: User = { id: randomUUID(), ...user };
-        this.users.push(newUser);
-        return newUser;
+        return this.usersService.createUser(user);
     }
 
-
     @Delete(':id')
-    deleteUser(@Param("id", ParseUUIDPipe) id: UUID) {
-        const userIndex = this.users.findIndex(user => user.id === id)
-        if (userIndex == -1) throw new NotFoundException("User not found")
-        this.users.splice(userIndex, 1)
-        return "User deleted"
+    deleteUser(@Param('id', ParseUUIDPipe) id: UUID) {
+        return this.usersService.deleteUser(id);
     }
 
     @Put(':id')
-    updateUser(@Param('id',) id: UUID, @Body() user: Partial<User>) {
-        const userFound: User = this.getUserById(id)
-        Object.assign(userFound, user)
-        return userFound
+    updateUser(@Param('id', ParseUUIDPipe) id: UUID, @Body() user: UpdateUserDto) {
+        return this.usersService.updateUser(id, user);
     }
 }

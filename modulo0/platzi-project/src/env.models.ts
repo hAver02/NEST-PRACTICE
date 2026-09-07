@@ -1,4 +1,7 @@
 export interface Env {
-    VARIABLE1: string;
-    VARIABLE2: string;
+    POSTGRES_DB: string;
+    POSTGRES_USER: string;
+    POSTGRES_PASSWORD: string;
+    POSTGRES_PORT: number;
+    POSTGRES_HOST: string;
 }

@@ -15,8 +15,7 @@ export class AppController {
 
     @Get()
     getHello(): string {
-        console.log(this.configService.get("VARIABLE1", { infer: true }))
-        console.log(this.configService.get("VARIABLE2"))
+        console.log('Connected DB:', this.configService.get('POSTGRES_DB', { infer: true }));
         return this.appService.getHello();
     }
 
